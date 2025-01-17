@@ -25,8 +25,8 @@ const App = () => {
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
-      setError('File size exceeds the limit of 10MB.');
+    if (file.size > 30 * 1024 * 1024) {
+      setError('File size exceeds the limit of 30MB.');
       return;
     }
 
@@ -206,14 +206,14 @@ const App = () => {
                       <div className="font-medium">⚠️ Requirements:</div>
                       <div className="mt-1">
                         <div>• Only memories_history.html files generated from Snapchat are supported</div>
-                        <div>• Max 10MB file size</div>
+                        <div>• Max 30MB file size</div>
                       </div>
                     </div>
                     
                     <ol className="space-y-2 text-sm text-gray-600">
                       <li>1. Login into your Snapchat account website</li>
-                      <li>2. Generate the memories export under 'My Data' and select timerange and everything needed</li>
-                      <li>3. You will receive the memories_history.html from your accounts website when ready</li>
+                      <li>2. Generate the memories export under 'My Data' by html export and select timerange and everything needed</li>
+                      <li>3. You will receive a zip file with the memories_history.html from your accounts website when ready</li>
                       <li>4. Upload the memories_history.html file below</li>
                     </ol>
                   </div>
