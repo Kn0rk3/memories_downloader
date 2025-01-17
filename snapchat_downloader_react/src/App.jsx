@@ -412,7 +412,10 @@ class DownloadWorker {
                 return;
               }
 
+              // Create a unique ID for this download
+              const downloadId = `download-frame-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
               const iframe = document.createElement('iframe');
+              iframe.id = downloadId;
               iframe.style.display = 'none';
               document.body.appendChild(iframe);
               
@@ -420,17 +423,28 @@ class DownloadWorker {
                 <a download href="${mediaUrl}">Download</a>
                 <script>
                   document.querySelector('a').click();
-                  window.parent.postMessage('download-started', '*');
+                  window.parent.postMessage({
+                    type: 'download-started',
+                    downloadId: '${downloadId}'
+                  }, '*');
                 </script>
               `);
               
+              let isCleanedUp = false;
               const cleanup = () => {
-                document.body.removeChild(iframe);
+                if (isCleanedUp) return;
+                isCleanedUp = true;
+                
+                const frame = document.getElementById(downloadId);
+                if (frame && frame.parentNode) {
+                  frame.parentNode.removeChild(frame);
+                }
                 resolve();
               };
               
               const messageHandler = (event) => {
-                if (event.data === 'download-started') {
+                if (event.data?.type === 'download-started' && 
+                    event.data?.downloadId === downloadId) {
                   window.removeEventListener('message', messageHandler);
                   setTimeout(cleanup, 1000);
                 }
@@ -438,6 +452,7 @@ class DownloadWorker {
               
               window.addEventListener('message', messageHandler);
               
+              // Fallback cleanup
               setTimeout(() => {
                 window.removeEventListener('message', messageHandler);
                 cleanup();
