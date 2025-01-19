@@ -40,6 +40,10 @@ jobs:
           output_location: "dist" # Location of the built app files (matches Vite's output)
           skip_app_build: false # Let Azure handle the build process
           app_build_command: "npm run build"
+        env: # Add environment variables here
+          VITE_GITHUB_URL: ${{ secrets.VITE_GITHUB_URL }}
+          VITE_COFFEE_URL: ${{ secrets.VITE_COFFEE_URL }}
+          VITE_APP_TITLE: ${{ secrets.VITE_APP_TITLE }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
