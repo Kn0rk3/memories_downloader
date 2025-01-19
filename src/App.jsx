@@ -1,5 +1,5 @@
 import config from './config/config';
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Coffee } from 'lucide-react';
@@ -8,6 +8,9 @@ import DownloadProgress from './components/DownloadProgress';
 import UsageStats from './components/UsageStats';
 
 const App = () => {
+  useEffect(() => {
+    document.title = config.app.title;
+  }, []);
   const [groupedLinks, setGroupedLinks] = useState({});
   const [downloadStatus, setDownloadStatus] = useState(null);
   const [error, setError] = useState('');
@@ -15,6 +18,15 @@ const App = () => {
   const [selectedItems, setSelectedItems] = useState({ years: [], months: [] });
   const [workerCount, setWorkerCount] = useState(3);
   const [isInstructionsOpen, setIsInstructionsOpen] = useState(false);
+
+  console.log('Environment Variables:', {
+    github: config.github.url,
+    coffee: config.coffee.url,
+    title: config.app.title,
+    rawGithub: import.meta.env.VITE_GITHUB_URL,
+    rawCoffee: import.meta.env.VITE_COFFEE_URL,
+    rawTitle: import.meta.env.VITE_APP_TITLE
+  });
 
   const processFile = async (event) => {
     const file = event.target.files[0];
