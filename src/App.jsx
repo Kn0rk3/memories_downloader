@@ -133,7 +133,7 @@ const App = () => {
       <header className="bg-white border-b">
         <div className="container mx-auto px-4 py-2">
           <div className="flex justify-between items-center">
-            <h1 className="text-xl font-bold">Snapchat Memories Downloader</h1>
+            <h1 className="text-xl font-bold">{config.app.title}</h1>
             <div className="flex gap-4">
               <a href={config.github.url} 
                 className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
