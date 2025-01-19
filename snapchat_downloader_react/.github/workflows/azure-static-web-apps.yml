@@ -1,3 +1,4 @@
+
 name: Azure Static Web Apps CI/CD
 
 on:
@@ -37,7 +38,7 @@ jobs:
           action: "upload"
           app_location: "/" # Location of your app's source code
           output_location: "dist" # Location of the built app files (matches Vite's output)
-          skip_app_build: false # Let Azure handle the build process
+          skip_app_build: true # Let Azure handle the build process
           app_build_command: "npm run build"
 
   close_pull_request_job:
