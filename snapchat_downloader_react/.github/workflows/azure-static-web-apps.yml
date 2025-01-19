@@ -1,4 +1,3 @@
-# build and deploy to Azure Static Web Apps
 name: Azure Static Web Apps CI/CD
 
 on:
@@ -38,7 +37,8 @@ jobs:
           action: "upload"
           app_location: "/" # Location of your app's source code
           output_location: "dist" # Location of the built app files (matches Vite's output)
-          skip_app_build: true # We've already built the app
+          skip_app_build: false # Let Azure handle the build process
+          app_build_command: "npm run build"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -51,4 +51,3 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: "close"
-  
