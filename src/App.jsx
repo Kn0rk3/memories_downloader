@@ -6,6 +6,7 @@ import { Coffee } from 'lucide-react';
 import { GitHubIcon } from './components/icons';
 import DownloadProgress from './components/DownloadProgress';
 import UsageStats from './components/UsageStats';
+import SelectionWarning from './components/SelectionWarning';
 
 const App = () => {
   useEffect(() => {
@@ -321,6 +322,11 @@ const App = () => {
                       </div>
                     ))}
                   </div>
+
+                  {/* Add the warning here, right before the button */}
+                  <SelectionWarning 
+                    selectedCount={selectedItems.years.length + selectedItems.months.length} 
+                  />
 
                   <button
                     onClick={downloadFiles}
