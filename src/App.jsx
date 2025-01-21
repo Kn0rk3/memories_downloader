@@ -143,7 +143,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white border-b">
+      <header className="fixed top-0 left-0 right-0 bg-white border-b shadow-sm z-50">
         <div className="container mx-auto px-4 py-2">
           <div className="flex justify-between items-center">
             <h1 className="text-xl font-bold">{config.app.title}</h1>
@@ -162,6 +162,9 @@ const App = () => {
           </div>
         </div>
       </header>
+
+      {/* Spacer to prevent content from going under fixed header */}
+      <div className="h-14"></div>
 
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto space-y-6">
