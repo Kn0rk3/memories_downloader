@@ -20,15 +20,6 @@ const App = () => {
   const [workerCount, setWorkerCount] = useState(3);
   const [isInstructionsOpen, setIsInstructionsOpen] = useState(false);
 
-  console.log('Environment Variables:', {
-    github: config.github.url,
-    coffee: config.coffee.url,
-    title: config.app.title,
-    rawGithub: import.meta.env.VITE_GITHUB_URL,
-    rawCoffee: import.meta.env.VITE_COFFEE_URL,
-    rawTitle: import.meta.env.VITE_APP_TITLE
-  });
-
   const processFile = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
