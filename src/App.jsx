@@ -153,11 +153,11 @@ const App = () => {
                 <GitHubIcon size={20} />
                 <span className="text-sm">GitHub</span>
               </a>
-              <a href={config.coffee.url}
+              {/* <a href={config.coffee.url}
                 className="flex items-center gap-2 text-gray-600 hover:text-gray-900">
                 <Coffee size={20} />
                 <span className="text-sm">Buy me a coffee</span>
-              </a>
+              </a> */}
             </div>
           </div>
         </div>
