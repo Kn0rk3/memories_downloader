@@ -7,8 +7,68 @@ import { GitHubIcon } from './components/icons';
 import DownloadProgress from './components/DownloadProgress';
 import UsageStats from './components/UsageStats';
 import SelectionWarning from './components/SelectionWarning';
+import { ApplicationInsights } from '@microsoft/applicationinsights-web';
+
+let appInsights;
+
+const initializeAppInsights = () => {
+  if (appInsights) return;
+    
+  appInsights = new ApplicationInsights({
+    config: {
+      instrumentationKey: "aac1ea5a-bddc-4d29-b114-d59cb180ef0d",
+      disableIpTracking: true,
+      disableCookiesUseStorage: true,
+      autoTrackPageVisitTime: false,
+      autoUnsubscribePageEvents: [],
+      disableExceptionTracking: true,
+      // Disable default telemetry processors
+      enableRequestHeaderTracking: false,
+      enableResponseHeaderTracking: false,
+      enableCorsCorrelation: false
+    }
+  });
+
+  appInsights.loadAppInsights();
+  // Add telemetry initializer to strip out unwanted properties
+  appInsights.addTelemetryInitializer((envelope) => {
+    const telemetryItem = envelope.data.baseData;
+    
+    // Remove device properties
+    if (telemetryItem.properties) {
+      delete telemetryItem.properties['ai.device.id'];
+      delete telemetryItem.properties['ai.device.model'];
+      delete telemetryItem.properties['ai.device.osVersion'];
+      delete telemetryItem.properties['ai.device.type'];
+      delete telemetryItem.properties['ai.device.locale'];
+      delete telemetryItem.properties['ai.user.id'];
+      delete telemetryItem.properties['ai.user.authenticatedUserIdProvider'];
+      delete telemetryItem.properties['ai.session.id'];
+      delete telemetryItem.properties['ai.location.ip'];
+    }
+    
+    // Remove tags that contain user/device/location info
+    if (envelope.tags) {
+      delete envelope.tags['ai.user.id'];
+      delete envelope.tags['ai.user.authUserId'];
+      delete envelope.tags['ai.device.id'];
+      delete envelope.tags['ai.device.locale'];
+      delete envelope.tags['ai.device.model'];
+      delete envelope.tags['ai.device.os'];
+      delete envelope.tags['ai.device.osVersion'];
+      delete envelope.tags['ai.device.type'];
+      delete envelope.tags['ai.location.ip'];
+      delete envelope.tags['ai.session.id'];
+    }
+    
+    return true;
+  });
+};
 
 const App = () => {
+  useEffect(() => {
+    initializeAppInsights();
+  }, []);
   useEffect(() => {
     document.title = config.app.title;
   }, []);
@@ -24,6 +84,10 @@ const App = () => {
     const file = event.target.files[0];
     if (!file) return;
 
+    if (file) {
+      // Track the upload event
+      appInsights?.trackEvent({name: 'html_file_uploaded'});
+    }
     if (!file.name.endsWith('.html')) {
       setError('Invalid file type. Only HTML files are allowed.');
       return;
@@ -401,6 +465,13 @@ class DownloadWorker {
         if (this.queue.length > 0) {
           this.processQueue();
         } else if (this.activeDownloads === 0) {
+          // Track download completion with memory count
+          appInsights?.trackEvent({
+            name: 'memories_downloaded',
+            properties: {
+              countCompleted: this.completed,
+              countFailed: this.failed}
+          });
           this.onComplete(this.errors);
         }
       }
